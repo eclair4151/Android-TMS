@@ -5,6 +5,13 @@ import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
 
+import com.android.volley.Request;
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
+import com.android.volley.toolbox.StringRequest;
+import com.shemeshapps.android_tms.Parser;
+import com.shemeshapps.android_tms.RequestUtil;
+
 
 public class MainActivity extends ActionBarActivity {
 
@@ -12,6 +19,27 @@ public class MainActivity extends ActionBarActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        RequestUtil.init(this);
+
+        /*RequestUtil.getHomePage(new Response.Listener() {
+            @Override
+            public void onResponse(Object response) {
+
+            }
+        });*/
+
+
+
+        RequestUtil.searchClasses(new Response.Listener() {
+            @Override
+            public void onResponse(Object response) {
+                Parser.ParseClassList((String) response);
+            }
+        }, 0, "", "101", "");
+
+
+
     }
 
 
