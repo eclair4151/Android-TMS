@@ -10,6 +10,7 @@ import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
 import com.shemeshapps.android_tms.Helpers.PersistentCookieStore;
+import com.shemeshapps.android_tms.Helpers.WebTMSRequest;
 
 import java.net.CookieHandler;
 import java.net.CookieManager;
@@ -26,13 +27,18 @@ import java.util.TreeMap;
 public class RequestUtil {
 
     public static RequestQueue queue;
+    public static Response.ErrorListener errorListener = new Response.ErrorListener() {
+        @Override
+        public void onErrorResponse(VolleyError error) {
+
+        }
+    };
 
     public static void init(Context context)
     {
         //CookieHandler.setDefault(new CookieManager(PersistentCookieStore.getInstance(context), CookiePolicy.ACCEPT_ALL));
 
 
-// Optionally, you can just use the default CookieManager
         CookieManager manager = new CookieManager();
         CookieHandler.setDefault( manager  );
 
@@ -42,12 +48,8 @@ public class RequestUtil {
     public static void getHomePage(Response.Listener listener)
     {
         String url = "https://duapp2.drexel.edu/webtms_du/app";
-        StringRequest r = new StringRequest(Request.Method.GET,url,listener,new Response.ErrorListener() {
-            @Override
-            public void onErrorResponse(VolleyError error) {
+        WebTMSRequest r = new WebTMSRequest(Request.Method.GET,url,listener,errorListener,WebTMSRequest.requestType.HOMEPAGE);
 
-            }
-        });
         queue.add(r);
     }
 
@@ -57,12 +59,7 @@ public class RequestUtil {
     {
         String url = "https://duapp2.drexel.edu/webtms_du/app";
 
-        StringRequest r = new StringRequest(Request.Method.POST,url,listener,new Response.ErrorListener() {
-            @Override
-            public void onErrorResponse(VolleyError error) {
-
-            }
-        }){
+        WebTMSRequest r = new WebTMSRequest(Request.Method.POST,url,listener,errorListener, WebTMSRequest.requestType.CLASSSEARCH){
         @Override
         protected Map<String, String> getParams() throws AuthFailureError
         {

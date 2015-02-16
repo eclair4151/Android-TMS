@@ -1,5 +1,6 @@
 package com.shemeshapps.android_tmsexampleapp;
 
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
 import android.view.Menu;
@@ -7,6 +8,8 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.EditText;
+import android.widget.ListView;
 import android.widget.ProgressBar;
 import android.widget.Spinner;
 
@@ -14,9 +17,13 @@ import com.android.volley.Request;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
+import com.shemeshapps.android_tms.Helpers.Base64Coder;
+import com.shemeshapps.android_tms.Models.BasicClass;
 import com.shemeshapps.android_tms.Models.DrexelTerm;
 import com.shemeshapps.android_tms.Parser;
 import com.shemeshapps.android_tms.RequestUtil;
+import com.shemeshapps.android_tmsexampleapp.adapters.ClassListAdapter;
+import com.shemeshapps.android_tmsexampleapp.adapters.TermSpinnerAdapter;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -27,69 +34,79 @@ public class MainActivity extends ActionBarActivity {
     Spinner termSelecter;
     ProgressBar termProgress;
     Button searchButton;
+    EditText courseName,courseNum,courseCRN;
+    SwipeRefreshLayout refreshLayout;
+    ListView classList;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        termSelecter = (Spinner)findViewById(R.id.TermsSpinner);
-        termProgress = (ProgressBar)findViewById(R.id.loadingTermsProgress);
-        searchButton = (Button)findViewById(R.id.searchCourses);
-        final List<String> stringTerms = new ArrayList<String>();
-        final ArrayAdapter<String> adapter = new ArrayAdapter<String>(this,android.R.layout.simple_spinner_item,stringTerms);
-        termSelecter.setAdapter(adapter);
+        setupView();
+
+        final TermSpinnerAdapter termSpinnerAdapter = new TermSpinnerAdapter(this,new ArrayList<DrexelTerm>());
+        termSelecter.setAdapter(termSpinnerAdapter);
+
+        final ClassListAdapter classListAdapter = new ClassListAdapter(this,new ArrayList<BasicClass>());
+        classList.setAdapter(classListAdapter);
 
         RequestUtil.init(this);
+
 
         RequestUtil.getHomePage(new Response.Listener() {
             @Override
             public void onResponse(Object response) {
-                List<DrexelTerm> terms = Parser.ParseHomepage((String)response);
-
-                for(DrexelTerm term:terms)
-                {
-                    stringTerms.add(term.title);
-                    adapter.notifyDataSetChanged();
-                    termProgress.setVisibility(View.GONE);
-                    searchButton.setEnabled(true);
-                }
-
+                termSpinnerAdapter.clear();
+                termSpinnerAdapter.addAll((List<DrexelTerm>) response);
+                termProgress.setVisibility(View.GONE);
+                searchButton.setEnabled(true);
             }
         });
 
 
-
-        RequestUtil.searchClasses(new Response.Listener() {
+        searchButton.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onResponse(Object response) {
-                Parser.ParseClassList((String) response);
+            public void onClick(View v) {
+
+                Response.Listener listener = new Response.Listener() {
+                    @Override
+                    public void onResponse(Object response) {
+                        refreshLayout.setRefreshing(false);
+                        classListAdapter.clear();
+                        classListAdapter.addAll((List<BasicClass>)response);
+                    }
+                };
+
+                DrexelTerm curTerm = (DrexelTerm)termSelecter.getSelectedItem();
+                RequestUtil.searchClasses(listener,curTerm.index, courseName.getText().toString(), courseNum.getText().toString(),courseCRN.getText().toString());
+                refreshLayout.setRefreshing(true);
             }
-        }, 1, "", "101", "");
-
-
+        });
 
     }
 
 
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.menu_main, menu);
-        return true;
+
+    private void setupView()
+    {
+        termSelecter = (Spinner)findViewById(R.id.TermsSpinner);
+        termProgress = (ProgressBar)findViewById(R.id.loadingTermsProgress);
+        searchButton = (Button)findViewById(R.id.searchCourses);
+        courseName = (EditText)findViewById(R.id.courseNameBox);
+        courseNum = (EditText)findViewById(R.id.courseNumBox);
+        courseCRN = (EditText)findViewById(R.id.courseCRNBox);
+        refreshLayout = (SwipeRefreshLayout)findViewById(R.id.listRefreshLayout);
+        refreshLayout.setColorSchemeResources(android.R.color.holo_blue_bright,
+                android.R.color.holo_green_light,
+                android.R.color.holo_orange_light,
+                android.R.color.holo_red_light);
+        refreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+            @Override
+            public void onRefresh() {
+                refreshLayout.setRefreshing(false);
+            }
+        });
+        classList = (ListView)findViewById(R.id.classList);
     }
 
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up button, so long
-        // as you specify a parent activity in AndroidManifest.xml.
-        int id = item.getItemId();
-
-        //noinspection SimplifiableIfStatement
-        if (id == R.id.action_settings) {
-            return true;
-        }
-
-        return super.onOptionsItemSelected(item);
-    }
 }

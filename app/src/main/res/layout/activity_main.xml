@@ -3,6 +3,8 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
+    android:focusableInTouchMode="true"
+    android:focusable="true"
     tools:context=".MainActivity">
 
     <LinearLayout
@@ -31,17 +33,22 @@
             android:layout_width="80dp"
             android:layout_height="wrap_content"
             android:gravity="center"
+            android:id="@+id/courseNameBox"
             android:hint="Name" />
 
         <EditText
             android:layout_width="70dp"
             android:layout_height="wrap_content"
+            android:id="@+id/courseNumBox"
+            android:inputType="number"
             android:gravity="center"
             android:hint="Num" />
 
         <EditText
             android:layout_width="80dp"
             android:layout_height="wrap_content"
+            android:inputType="number"
+            android:id="@+id/courseCRNBox"
             android:gravity="center"
             android:hint="CRN" />
 
@@ -55,8 +62,14 @@
         android:layout_gravity="center_horizontal"
         android:text="Search Courses" />
 
+    <android.support.v4.widget.SwipeRefreshLayout
+        android:layout_width="fill_parent"
+        android:id="@+id/listRefreshLayout"
+
+        android:layout_height="fill_parent">
     <ListView
+        android:id="@+id/classList"
         android:layout_width="fill_parent"
         android:layout_height="fill_parent" />
-
+    </android.support.v4.widget.SwipeRefreshLayout>
 </LinearLayout>
