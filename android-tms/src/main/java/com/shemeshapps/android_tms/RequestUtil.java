@@ -16,7 +16,9 @@ import java.net.CookieManager;
 import java.net.CookiePolicy;
 import java.net.CookieStore;
 import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.Map;
+import java.util.TreeMap;
 
 /**
  * Created by Tomer on 2/14/15.
@@ -49,6 +51,8 @@ public class RequestUtil {
         queue.add(r);
     }
 
+
+    //NOTE: Term is from 1-x sending a 0 will end up crashing it
     public static void searchClasses(Response.Listener listener,final int termIndex,final String courseName,final String courseNumber,final String crn)
     {
         String url = "https://duapp2.drexel.edu/webtms_du/app";
@@ -62,17 +66,15 @@ public class RequestUtil {
         @Override
         protected Map<String, String> getParams() throws AuthFailureError
         {
-            Map<String, String> params = new HashMap<>();
-            params.put("crseNumb", courseNumber);
+            Map<String, String> params = new LinkedHashMap<>();
+
             params.put("formids", "term,courseName,crseNumb,crn");
             params.put("component", "searchForm");
             params.put("page", "Home");
             params.put("service", "direct");
-            params.put("submitmode", "submit");
-            params.put("submitname", "");
             params.put("term", Integer.toString(termIndex));
             params.put("courseName", courseName);
-
+            params.put("crseNumb", courseNumber);
             params.put("crn", crn);
             return params;
         }

@@ -23,7 +23,7 @@ public class Parser {
         int index = 1;
         for(Element term:terms)
         {
-            allDrexelTerms.add(new DrexelTerm(term.getElementsByAttribute("href").attr("href"), term.getElementsByAttribute("href").text(),index));
+            allDrexelTerms.add(new DrexelTerm(term.getElementsByAttribute("href").text(),term.getElementsByAttribute("href").attr("href"),index));
             index++;
         }
         return allDrexelTerms;
