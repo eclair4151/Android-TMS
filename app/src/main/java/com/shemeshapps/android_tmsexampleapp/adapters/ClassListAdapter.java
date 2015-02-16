@@ -49,7 +49,15 @@ public class ClassListAdapter extends ArrayAdapter<BasicClass> {
         classProf.setText(c.instructor);
         classTitle.setText(c.courseTitle);
         classTime.setText(c.days + " " + c.stringTime);
-        classSpots.setText(c.stringEnroll);
+        if(c.classFull)
+        {
+            classSpots.setText("FULL");
+        }
+        else
+        {
+            classSpots.setText("Max enroll=" + c.maxEnroll + ", Enroll=" + c.curEnrolled);
+        }
+
 
 
         return convertView;

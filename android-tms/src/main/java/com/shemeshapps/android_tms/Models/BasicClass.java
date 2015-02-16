@@ -20,7 +20,6 @@ public class BasicClass {
 
     public String instructor;
 
-    public String stringEnroll;
     public int maxEnroll;
     public int curEnrolled;
     public boolean classFull;

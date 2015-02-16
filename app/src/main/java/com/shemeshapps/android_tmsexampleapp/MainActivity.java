@@ -6,6 +6,7 @@ import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
@@ -27,6 +28,8 @@ import com.shemeshapps.android_tmsexampleapp.adapters.TermSpinnerAdapter;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 
 public class MainActivity extends ActionBarActivity {
@@ -51,7 +54,7 @@ public class MainActivity extends ActionBarActivity {
         classList.setAdapter(classListAdapter);
 
         RequestUtil.init(this);
-
+        
 
         RequestUtil.getHomePage(new Response.Listener() {
             @Override
@@ -74,9 +77,10 @@ public class MainActivity extends ActionBarActivity {
                         refreshLayout.setRefreshing(false);
                         classListAdapter.clear();
                         classListAdapter.addAll((List<BasicClass>)response);
+
                     }
                 };
-
+                hideSoftKeyBoard();
                 DrexelTerm curTerm = (DrexelTerm)termSelecter.getSelectedItem();
                 RequestUtil.searchClasses(listener,curTerm.index, courseName.getText().toString(), courseNum.getText().toString(),courseCRN.getText().toString());
                 refreshLayout.setRefreshing(true);
@@ -107,6 +111,15 @@ public class MainActivity extends ActionBarActivity {
             }
         });
         classList = (ListView)findViewById(R.id.classList);
+    }
+
+
+    private void hideSoftKeyBoard() {
+        InputMethodManager imm = (InputMethodManager) getSystemService(INPUT_METHOD_SERVICE);
+
+        if(imm.isAcceptingText()) { // verify if the soft keyboard is open
+            imm.hideSoftInputFromWindow(getCurrentFocus().getWindowToken(), 0);
+        }
     }
 
 }
