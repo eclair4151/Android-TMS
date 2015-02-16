@@ -10,13 +10,18 @@ public class BasicClass {
     public String courseNum;
     public String type;
     public String sec;
-    public int crn;
+    public String crn;
     public String courseTitle;
     public String days;
+
     public Date startTime;
     public Date endTime;
+    public String stringTime;
+
     public String instructor;
+
+    public String stringEnroll;
     public int maxEnroll;
-    public int enrolled;
+    public int curEnrolled;
     public boolean classFull;
 }

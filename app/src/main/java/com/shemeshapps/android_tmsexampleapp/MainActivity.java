@@ -59,12 +59,12 @@ public class MainActivity extends ActionBarActivity {
 
 
 
-      /*  RequestUtil.searchClasses(new Response.Listener() {
+        RequestUtil.searchClasses(new Response.Listener() {
             @Override
             public void onResponse(Object response) {
                 Parser.ParseClassList((String) response);
             }
-        }, 1, "", "101", "");*/
+        }, 1, "", "101", "");
 
 
 

@@ -36,6 +36,27 @@ public class Parser {
         Element body = Jsoup.parse(html).body();
         Elements classes = body.getElementsByClass("tableHeader").get(0).parent().children();
         classes.remove(0);
+        classes.remove(classes.size()-1);
+        for(Element curClass:classes)
+        {
+
+            BasicClass basicClass = new BasicClass();
+            Elements children = curClass.children();
+            basicClass.subject = children.get(0).text();
+            basicClass.courseNum = children.get(1).text();
+            basicClass.type = children.get(2).text();
+            basicClass.sec = children.get(3).text();
+            basicClass.crn = children.get(4).child(0).child(0).text();
+            basicClass.stringEnroll = children.get(4).child(0).attr("title");
+            basicClass.courseTitle = children.get(5).text();
+
+            Element dateTime =  children.get(6).child(0).child(0).child(0);
+            basicClass.days = dateTime.child(0).text();
+            basicClass.stringTime = dateTime.child(1).text();
+            basicClass.instructor = children.get(7).text();
+            allClasses.add(basicClass);
+
+        }
 
         return allClasses;
     }
