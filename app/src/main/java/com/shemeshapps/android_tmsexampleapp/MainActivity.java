@@ -80,6 +80,7 @@ public class MainActivity extends ActionBarActivity {
 
                     }
                 };
+
                 hideSoftKeyBoard();
                 DrexelTerm curTerm = (DrexelTerm)termSelecter.getSelectedItem();
                 RequestUtil.searchClasses(listener,curTerm.index, courseName.getText().toString(), courseNum.getText().toString(),courseCRN.getText().toString());

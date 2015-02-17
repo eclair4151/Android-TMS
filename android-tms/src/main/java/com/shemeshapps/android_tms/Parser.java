@@ -1,5 +1,7 @@
 package com.shemeshapps.android_tms;
 
+import android.util.Log;
+
 import com.shemeshapps.android_tms.Models.BasicClass;
 import com.shemeshapps.android_tms.Models.DrexelTerm;
 
@@ -34,6 +36,7 @@ public class Parser {
 
     public static List<BasicClass> ParseClassList(String html)
     {
+        Log.e("FINISHED","FINSIHED NETWORK SHIT");
         List<BasicClass> allClasses = new ArrayList<>();
         Element body = Jsoup.parse(html).body();
         Elements classes = body.getElementsByClass("tableHeader").get(0).parent().children();
@@ -51,6 +54,7 @@ public class Parser {
             basicClass.crn = children.get(4).child(0).child(0).text();
             String stringEnroll = children.get(4).child(0).attr("title");
 
+            Log.e("PARSING","PARSING NETWORK SHIT");
             if(stringEnroll.equals("FULL"))
             {
                 basicClass.maxEnroll = 0;
@@ -59,7 +63,7 @@ public class Parser {
             }
             else
             {
-                final Pattern pattern = Pattern.compile("^Max enroll=(\\\\d+); Enroll=(\\\\d+)$");
+                final Pattern pattern = Pattern.compile("^Max enroll=(\\d+); Enroll=(\\d+)$");
                 final Matcher matcher = pattern.matcher(stringEnroll);
                 matcher.find();
                 basicClass.maxEnroll = Integer.parseInt(matcher.group(1));

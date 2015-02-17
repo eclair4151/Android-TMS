@@ -2,6 +2,7 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
+      <module fileurl="file://$PROJECT_DIR$/Android-TMS.iml" filepath="$PROJECT_DIR$/Android-TMS.iml" />
       <module fileurl="file://$PROJECT_DIR$/Android-TMSExampleApp.iml" filepath="$PROJECT_DIR$/Android-TMSExampleApp.iml" />
       <module fileurl="file://$PROJECT_DIR$/android-tms/android-tms.iml" filepath="$PROJECT_DIR$/android-tms/android-tms.iml" />
       <module fileurl="file://$PROJECT_DIR$/app/app.iml" filepath="$PROJECT_DIR$/app/app.iml" />
