@@ -39,8 +39,8 @@ public class RequestUtil {
         //CookieHandler.setDefault(new CookieManager(PersistentCookieStore.getInstance(context), CookiePolicy.ACCEPT_ALL));
 
 
-        CookieManager manager = new CookieManager();
-        CookieHandler.setDefault( manager  );
+        //CookieManager manager = new CookieManager();
+        //CookieHandler.setDefault( manager  );
 
         queue = Volley.newRequestQueue(context);
     }

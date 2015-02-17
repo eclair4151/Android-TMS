@@ -36,7 +36,6 @@ public class Parser {
 
     public static List<BasicClass> ParseClassList(String html)
     {
-        Log.e("FINISHED","FINSIHED NETWORK SHIT");
         List<BasicClass> allClasses = new ArrayList<>();
         Element body = Jsoup.parse(html).body();
         Elements classes = body.getElementsByClass("tableHeader").get(0).parent().children();
@@ -54,7 +53,6 @@ public class Parser {
             basicClass.crn = children.get(4).child(0).child(0).text();
             String stringEnroll = children.get(4).child(0).attr("title");
 
-            Log.e("PARSING","PARSING NETWORK SHIT");
             if(stringEnroll.equals("FULL"))
             {
                 basicClass.maxEnroll = 0;
@@ -77,8 +75,6 @@ public class Parser {
             Element dateTime =  children.get(6).child(0).child(0).child(0);
             basicClass.days = dateTime.child(0).text();
             basicClass.stringTime = dateTime.child(1).text();
-
-
 
             basicClass.instructor = children.get(7).text();
             allClasses.add(basicClass);
